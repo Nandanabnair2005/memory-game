@@ -1,0 +1,46 @@
+body {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background-color: #222;
+  color: white;
+  margin-top: 50px;
+}
+
+#game-board {
+  display: grid;
+  grid-template-columns: repeat(2, 150px);
+  grid-gap: 20px;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.button {
+  width: 150px;
+  height: 150px;
+  border-radius: 15px;
+  opacity: 0.8;
+  transition: opacity 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+/* Violet color theme */
+.violet  { background-color: violet; }
+.orchid  { background-color: orchid; }
+.purple  { background-color: mediumorchid; }
+.magenta { background-color: magenta; }
+
+.button.active {
+  opacity: 1;
+  box-shadow: 0 0 20px white;
+}
+
+#start-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
