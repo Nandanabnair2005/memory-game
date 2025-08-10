@@ -14,6 +14,13 @@ body {
   margin: 20px auto;
 }
 
+.button.active {
+  opacity: 1;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px white;
+}
+
+
 .button {
   width: 150px;
   height: 150px;

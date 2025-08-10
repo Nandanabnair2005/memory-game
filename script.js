@@ -1,81 +1,86 @@
-const colors = ["violet", "orchid", "purple", "magenta"];
-let gameSequence = [];
-let playerSequence = [];
-let acceptingInput = false;
+const colors = ['violet', 'orchid', 'purple', 'magenta'];
+let gamePattern = [];
+let userPattern = [];
+let level = 0;
+let clickable = false;
 
-// DOM Elements
-const buttons = document.querySelectorAll(".button");
-const startButton = document.getElementById("start-button");
-const statusText = document.getElementById("status");
+const statusText = document.getElementById('status');
+const startButton = document.getElementById('start-button');
+const buttons = document.querySelectorAll('.button');
 
+// Flash animation for color
+function flash(color) {
+  const btn = document.querySelector(`.button.${color}`);
+  btn.classList.add('active');
+  setTimeout(() => {
+    btn.classList.remove('active');
+  }, 300);
+}
 
+// Play a new round
+function nextSequence() {
+  userPattern = [];
+  level++;
+  statusText.textContent = `Level ${level}`;
+  const randomColor = colors[Math.floor(Math.random() * colors.length)];
+  gamePattern.push(randomColor);
+  playPattern();
+}
 
-
-// Button click handler
-buttons.forEach(button => {
-  button.addEventListener("click", () => {
-    if (!acceptingInput) return;
-
-    const color = button.dataset.color;
-    playerSequence.push(color);
-    flashButton(color);
-
-    const index = playerSequence.length - 1;
-    if (playerSequence[index] !== gameSequence[index]) {
-      endGame();
-      return;
+// Show the full pattern to the user
+function playPattern() {
+  clickable = false;
+  let i = 0;
+  const interval = setInterval(() => {
+    flash(gamePattern[i]);
+    i++;
+    if (i >= gamePattern.length) {
+      clearInterval(interval);
+      clickable = true;
     }
+  }, 600);
+}
 
-    if (playerSequence.length === gameSequence.length) {
-      acceptingInput = false;
-      setTimeout(nextRound, 1000);
-    }
+// Start game
+startButton.addEventListener('click', () => {
+  gamePattern = [];
+  userPattern = [];
+  level = 0;
+  statusText.textContent = 'Get ready...';
+  setTimeout(() => {
+    nextSequence();
+  }, 500);
+});
+
+// Handle user clicks
+buttons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!clickable) return;
+
+    const clickedColor = btn.getAttribute('data-color');
+    userPattern.push(clickedColor);
+    flash(clickedColor);
+    checkAnswer(userPattern.length - 1);
   });
 });
 
-// Start game
-startButton.addEventListener("click", startGame);
+// Check the player's input
+function checkAnswer(currentIndex) {
+  if (userPattern[currentIndex] !== gamePattern[currentIndex]) {
+    gameOver();
+    return;
+  }
 
-function startGame() {
-  gameSequence = [];
-  playerSequence = [];
-  statusText.textContent = "Watch the sequence...";
-  nextRound();
-}
-
-function nextRound() {
-  playerSequence = [];
-  const nextColor = colors[Math.floor(Math.random() * colors.length)];
-  gameSequence.push(nextColor);
-  showSequence();
-}
-
-function showSequence() {
-  acceptingInput = false;
-  let i = 0;
-
-  const interval = setInterval(() => {
-    flashButton(gameSequence[i]);
-    i++;
-    if (i >= gameSequence.length) {
-      clearInterval(interval);
-      acceptingInput = true;
-      statusText.textContent = `Your turn (Level ${gameSequence.length})`;
-    }
-  }, 800);
-}
-
-function flashButton(color) {
-  const button = document.querySelector(`.button.${color}`);
-  if (button) {
-    button.classList.add("active");
-    setTimeout(() => button.classList.remove("active"),400);
+  if (userPattern.length === gamePattern.length) {
+    setTimeout(() => nextSequence(), 1000);
   }
 }
 
-function endGame() {
-  acceptingInput = false;
-  failSound.currentTime = 0;
-  failSound.play();
-  statusText.textContent = `Game Over! You reached level ${gameSequence.length}. Click Start to play again.`;
+// Game over logic
+function gameOver() {
+  statusText.textContent = `❌ Game Over at Level ${level}. Click "Start Game" to try again.`;
+  clickable = false;
+  gamePattern = [];
+  userPattern = [];
+  level = 0;
 }
