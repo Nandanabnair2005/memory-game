@@ -13,3 +13,5 @@ Tthe feature I'd enjoy most is the increasing sequence challenge where each roun
 ### Q3:What would you add next if you had more time?
 
 If I had more time, I would add a scoreboard and difficulty levels to make the game more engaging. The scoreboard would track high scores, and difficulty levels could control the speed of the sequence or add distractions like flashing lights and extra sounds. 
+### Demo video 
+https://github.com/user-attachments/assets/5f2f2564-abec-41a0-8ef1-88b59d1146ce
